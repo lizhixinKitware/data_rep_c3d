@@ -74,6 +74,10 @@ def parseObject(obj,temppath=None):
     fv = parsePlanarRegion(obj)
   elif objtype == 'csg':
     fv = parseCSG(obj,temppath=temppath)
+  elif objtype == 'gable':
+    fv = parseGable(obj)
+  elif objtype == 'shed':
+    fv = parseShed(obj)
   # ensure numpy array
   fv['vertices'] = np.array(fv['vertices'])
 
@@ -86,6 +90,26 @@ def parseObject(obj,temppath=None):
   return fv
 
 
+# parse gable roof
+def parseGable(obj):
+    length = obj['length']
+    body_height = obj['body_height']
+    roof_height = obj['roof_height']
+    width = obj['width']
+    [vertices, faces] = primitiveMeshGen.gableGen(length, body_height, roof_height, width)
+    return {'vertices': vertices, 'faces': faces}
+
+
+# parse Shed roof
+def parseShed(obj):
+    height = obj['height']
+    length = obj['length']
+    theta = obj['theta']
+    width = obj['width']
+    [vertices, faces] = primitiveMeshGen.shedGen(height, length, theta, width)
+    return {'vertices': vertices,'faces': faces}
+  
+  
 # parse affine transform
 def parseTransform(trans):
   if not trans:
