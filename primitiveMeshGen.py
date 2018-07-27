@@ -17,6 +17,56 @@ def pol2cart(rad,theta):
   y = rad*np.sin(theta)
   return x,y
 
+#generate shed object
+def shedGen(height, length, theta, width):
+    xinterval = np.cos(theta) * width / 2
+    yinterval = length / 2
+    roof_height = xinterval * np.tan(theta)
+    vertices = []
+    vertices.append([-xinterval, yinterval, roof_height])
+    vertices.append([-xinterval, -yinterval, roof_height])
+    vertices.append([xinterval, -yinterval, -roof_height])
+    vertices.append([xinterval, yinterval, -roof_height])
+
+    vertices.append([-xinterval, yinterval, -height])
+    vertices.append([-xinterval, -yinterval, -height])
+    vertices.append([xinterval, -yinterval, -height])
+    vertices.append([xinterval, yinterval, -height])
+
+    faces = [[0, 1, 2, 3],
+             [4, 7, 6, 5],
+             [0, 4, 5, 1],
+             [1, 5, 6, 2],
+             [2, 6, 7, 3],
+             [3, 7, 4, 0]]
+    return vertices, faces
+
+#generate gable object
+def gableGen(length, body_height, roof_height, width):
+    xinterval = length / 2
+    yinterval = width / 2
+    vertices = []
+    vertices.append([-xinterval, yinterval, -roof_height])
+    vertices.append([-xinterval, 0, 0])
+    vertices.append([-xinterval, -yinterval, -roof_height])
+    vertices.append([xinterval, -yinterval, -roof_height])
+    vertices.append([xinterval, 0, 0])
+    vertices.append([xinterval, yinterval, -roof_height])
+
+    vertices.append([-xinterval, yinterval, -roof_height - body_height])
+    vertices.append([-xinterval, -yinterval, -roof_height - body_height])
+    vertices.append([xinterval, -yinterval, -roof_height - body_height])
+    vertices.append([xinterval, yinterval, -roof_height - body_height])
+
+    faces = [[0, 1, 4, 5],
+             [1, 2, 3, 4],
+             [0, 6, 7, 2, 1],
+             [2, 7, 8, 3],
+             [3, 8, 9, 5, 4],
+             [5, 9, 6, 0],
+             [6, 9, 8, 7]]
+    return vertices, faces
+  
 #this function will generate a spherical mesh of a specified radius
 def sphereGen(radius):
   #10 degree steps
